@@ -5,7 +5,6 @@ import "./globals.css";
 import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { LanguageProvider } from "@/components/language-provider";
-import { Nav } from "@/components/nav"; // Import line check karlein
 
 const cairo = Cairo({
   subsets: ["latin", "arabic"],
@@ -33,14 +32,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" className={`${cairo.className}`}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en" className={`${cairo.className}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Suspense fallback={<div>Loading...</div>}>
-          <LanguageProvider>
-            {/* Global Navbar yahan rahega */}
-            <Nav />
-            <main>{children}</main>
-          </LanguageProvider>
+          <LanguageProvider>{children}</LanguageProvider>
         </Suspense>
         <Analytics />
       </body>
