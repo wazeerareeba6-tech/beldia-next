@@ -4,7 +4,6 @@ import useSWR from "swr"
 import React, { useEffect, useState } from "react"
 import Image from "next/image"
 import logo from "@/assets/logo.svg"
-import logoNav from '@/assets/logo-nav.svg'
 import { useT, useLanguage } from "@/components/language-provider"
 import Footer from "@/components/Footer"
 
@@ -36,9 +35,8 @@ export default function SubmittedPage({
   const { id } = React.use(params)
   const { data, error, isLoading } = useSWR(`/api/forms/${id}`, fetcher)
   const [showLoader, setShowLoader] = useState(true)
-  const [menuOpen, setMenuOpen] = useState(false)
   const t = useT()
-  const { lang, toggleLanguage } = useLanguage()
+  const { lang } = useLanguage()
 
   useEffect(() => {
     const timer = setTimeout(() => setShowLoader(false), 2000)
@@ -53,72 +51,16 @@ export default function SubmittedPage({
     )
   }
 
-  if (showLoader) return <AnimatedLogo />
+  if (showLoader || isLoading) return <AnimatedLogo />
 
-  return isLoading ? (
-    <AnimatedLogo />
-  ) : (
+  return (
     <>
-      {/* ✅ Responsive Navbar */}
-      <nav className="w-full bg-[#006D6F] text-white relative z-50">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
-          {/* Language Toggle */}
-          <button
-            onClick={toggleLanguage}
-            className="rounded-md border border-white/40 px-3 py-1 text-sm hover:bg-white/10 transition cursor-pointer"
-          >
-            {lang === "en" ? "العربية" : "English"}
-          </button>
-
-          {/* Desktop Menu */}
-          <ul className="hidden md:flex gap-8 text-sm font-medium">
-            <li className="cursor-pointer">{t("contactUs")}</li>
-            <li className="cursor-pointer">{t("platforms")}</li>
-            <li className="cursor-pointer">{t("inquiries")}</li>
-            <li className="cursor-pointer">{t("services")}</li>
-            <li className="cursor-pointer">{t("knowledgeCenter")}</li>
-            <li className="cursor-pointer">{t("aboutCountry")}</li>
-          </ul>
-
-          {/* Logo Section */}
-          
-            <Image
-              src={logoNav}
-              alt="Balady Logo"
-              width={120}
-              height={120}
-              className="bg-transparent"
-            />
-          
-
-          {/* Hamburger Button */}
-          <button
-            className="md:hidden ml-3 focus:outline-none"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <div className="space-y-1">
-              <span className="block h-0.5 w-6 bg-white"></span>
-              <span className="block h-0.5 w-6 bg-white"></span>
-              <span className="block h-0.5 w-6 bg-white"></span>
-            </div>
-          </button>
-        </div>
-
-        {/* Mobile Menu Dropdown */}
-        {menuOpen && (
-          <ul className="md:hidden flex flex-col items-center bg-[#00575A] text-sm font-medium py-3 space-y-2 transition-all duration-300">
-            <li className="cursor-pointer">{t("contactUs")}</li>
-            <li className="cursor-pointer">{t("platforms")}</li>
-            <li className="cursor-pointer">{t("inquiries")}</li>
-            <li className="cursor-pointer">{t("services")}</li>
-            <li className="cursor-pointer">{t("knowledgeCenter")}</li>
-            <li className="cursor-pointer">{t("aboutCountry")}</li>
-          </ul>
-        )}
-      </nav>
+      {/* NOTE: Yahan se manual <nav> hata diya gaya hai. 
+         Ab layout.tsx wala <Nav /> hi yahan nazar ayega.
+      */}
 
       {/* ✅ Main Content */}
-      <main className="mx-auto max-w-4xl p-8 bg-white shadow-sm border border-gray-300 rounded-md mt-6">
+      <main className="mx-auto max-w-4xl p-8 bg-white shadow-sm border border-gray-300 rounded-md mt-6" dir={lang === "ar" ? "rtl" : "ltr"}>
         <section className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-3">{t("healthCertificate")}</h2>
           {data?.photoUrl && (
@@ -139,16 +81,16 @@ export default function SubmittedPage({
             .filter(([k]) => !["id", "photoUrl", "createdAt"].includes(k))
             .map(([k, v]) => (
               <div key={k} className="form-field">
-                <label className="form-label">{t(k)}</label>
-                <div className="form-value">{String(v)}</div>
+                <label className="form-label font-bold text-gray-700">{t(k)}</label>
+                <div className="form-value border-b border-gray-200 py-1 text-gray-600">{String(v)}</div>
               </div>
             ))}
         </div>
       </main>
+      
       <div className="mt-6">
         <Footer />
       </div>
     </>
   )
 }
-
