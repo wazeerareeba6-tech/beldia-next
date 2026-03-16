@@ -4,7 +4,6 @@ import { useLanguage, useT } from "@/components/language-provider"
 import { Settings, Accessibility, ChevronDown, Lock, Link as LinkIcon, ExternalLink } from "lucide-react"
 import Image from "next/image"
 import { useState, useEffect } from "react"
-// @ts-ignore
 import logo from "../assets/arabic-flag.webp" 
 
 export function Nav() {
@@ -26,20 +25,20 @@ export function Nav() {
       {/* 1. Logo and Title Section */}
       <div className="flex flex-col items-center pt-6 pb-2">
         <Image 
-          src={logo} 
-          alt="Saudi Emblem" 
-          width={45} 
-          height={45} 
-          className="mb-3"
-          priority 
-        />
+  src={logo} 
+  alt="Saudi Emblem" 
+  width={40} 
+  height={40} 
+  style={{ width: 'auto', height: 'auto' }} // Yeh line add karein
+  priority 
+/>
         <h2 className="text-[14px] md:text-[16px] font-bold text-gray-800 text-center px-4">
           موقع حكومي مسجل لدى هيئة الحكومة الرقمية
         </h2>
       </div>
 
       {/* 2. "How to verify" - Right Aligned below Title */}
-      <div className="mx-auto max-w-5xl px-4 flex justify-start mb-2">
+      <div className="mx-auto max-w-5xl px-4 flex justify-end mb-2">
         <button 
           onClick={() => setIsVerifyOpen(!isVerifyOpen)}
           className="flex items-center gap-1 text-[#006D6F] font-bold text-[13px] hover:underline cursor-pointer"
